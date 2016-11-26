@@ -1,7 +1,12 @@
 import { Component } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { OnInit } from "@angular/core";
 import { AgGridNg2 } from 'ag-grid-ng2/main';
 import { GridOptions } from 'ag-grid/main';
+import { SparePart } from './spare_part';
+import { SparePartsService } from './spare_parts.service'
 
+import './rxjs-operators';
 
 @Component({
     selector: 'my-app',
@@ -13,12 +18,16 @@ import { GridOptions } from 'ag-grid/main';
               </ag-grid-ng2 >'
 })
 
-export class AppComponent {
+export class AppComponent implements OnInit {
     
     private gridOptions:GridOptions;
     private showGrid:boolean;
     private rowData:any[];
     private rowCount:string;
+
+    errorMessage: string;
+    heroes: SparePart[];
+    mode = 'Observable';
     
     myRowData = [
         {"name":"Ronald Bowman","country":"China","city":"Lutou","email":"rbowman0@spotify.com"},
@@ -53,10 +62,43 @@ export class AppComponent {
         {headerName: 'e-mail', field: "email" ,width:300}
     ];
  
-    constructor() {
+    constructor(private heroService: SparePartsService) {
         this.gridOptions = <GridOptions>{};
         this.gridOptions.rowData = this.myRowData;
         this.gridOptions.columnDefs = this.columnDefs;
         this.showGrid = true;
+    }
+
+    ngOnInit() {         
+        console.log( "OnInit works ))) " );
+
+        this.getHeroes();
+    }
+
+    getHeroes() {
+
+        this.heroService.getHeroes()
+                        .subscribe(
+                        heroes => { 
+                            this.heroes = heroes;
+                            console.log( 'received heroes: ' );
+                            console.log( heroes );
+                            console.log( 'heroes from this: ' );                            
+                            for ( var i = 0; i < heroes.length; ++i )
+                            {
+                                console.log( this.heroes[i] );
+                            }
+                            this.myRowData.push( this.heroes[0] );
+                            this.gridOptions.rowData = this.myRowData;
+                            this.gridOptions.api.setRowData( this.gridOptions.rowData );
+                            console.log( 'myRowData: ' );
+                            for ( var i = 0; i < this.myRowData.length; ++i )
+                            {
+                                console.log( this.myRowData[i] );
+                            }
+                        },
+                        error =>  { 
+                            this.errorMessage = <any>error
+                        });
     }
 }
