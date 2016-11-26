@@ -21,8 +21,6 @@ export class SparePartsService {
     private extractData( res: Response ) 
     {
         let body = res.json();
-        console.log( "response: " );
-        console.log( res.json() );
         return body.data || { };
     }
 

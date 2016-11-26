@@ -1,6 +1,8 @@
 export class SparePart {
-  name: string;
-  country: string;
-  city: string;
-  email: string;
+    code : string;
+    name : string;
+    description: string;
+    photo_id : string;
+    comment_voronezh : string;
+    comment_rostov : string;
 }
