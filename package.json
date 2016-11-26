@@ -1,0 +1,16 @@
+{
+  "name": "web-db-app",
+  "version": "1.0.0",
+  "description": "web-db-app",
+  "main": "server.js",
+  "scripts": {
+    "test": "no test",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.14.0",
+    "mongoose": "^4.6.7"
+  }
+}
