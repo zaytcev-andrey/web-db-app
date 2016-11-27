@@ -20,9 +20,24 @@ var spare_part_schema = mongoose.Schema({
     comment_rostov : String
 });
 
-var spare_part = mongoose.model( 'spare_part', spare_part_schema );
+var complaint_schema = mongoose.Schema({
+    date : String,
+    company : String,
+    description: String,
+    spare_part_id: String,
+    photo_id : String,
+    docs_id : String,
+    comment_rostov : String,
+    requirements: String,
+    solution: String,
+    result: String,
+    state: String
+});
 
-/*function create_spare_part()
+var spare_part = mongoose.model( 'spare_part', spare_part_schema );
+var Complaint = mongoose.model( 'Complaint', complaint_schema );
+
+function create_spare_parts()
 {
     console.log("creating initial db");
     
@@ -52,7 +67,35 @@ var spare_part = mongoose.model( 'spare_part', spare_part_schema );
     }
 }
 
-create_spare_part();*/
+function create_complaints()
+{
+    console.log("creating complaints db");
+    
+    var complaints = [
+        { "date":"01.01.2016", "company":"company 1", "description":"description 1", "spare_part_id":"1", "photo_id":"1", "docs_id":"1", "requirements":"requirements", "solution":"solution", "result":"result", "state":"active" },
+        { "date":"02.01.2016", "company":"company 2", "description":"description 2", "spare_part_id":"2", "photo_id":"2", "docs_id":"2", "requirements":"requirements", "solution":"solution", "result":"result", "state":"active" },
+        { "date":"03.01.2016", "company":"company 3", "description":"description 3", "spare_part_id":"3", "photo_id":"3", "docs_id":"3", "requirements":"requirements", "solution":"solution", "result":"result", "state":"active" },
+        { "date":"04.01.2016", "company":"company 4", "description":"description 4", "spare_part_id":"4", "photo_id":"4", "docs_id":"4", "requirements":"requirements", "solution":"solution", "result":"result", "state":"active" },
+        { "date":"05.01.2016", "company":"company 5", "description":"description 5", "spare_part_id":"5", "photo_id":"5", "docs_id":"5", "requirements":"requirements", "solution":"solution", "result":"result", "state":"active" },
+        { "date":"06.01.2016", "company":"company 6", "description":"description 6", "spare_part_id":"6", "photo_id":"6", "docs_id":"6", "requirements":"requirements", "solution":"solution", "result":"result", "state":"active" },
+        { "date":"07.01.2016", "company":"company 7", "description":"description 7", "spare_part_id":"7", "photo_id":"7", "docs_id":"7", "requirements":"requirements", "solution":"solution", "result":"result", "state":"active" },
+        { "date":"08.01.2016", "company":"company 8", "description":"description 8", "spare_part_id":"8", "photo_id":"8", "docs_id":"8", "requirements":"requirements", "solution":"solution", "result":"result", "state":"active" },
+        { "date":"09.01.2016", "company":"company 9", "description":"description 9", "spare_part_id":"9", "photo_id":"9", "docs_id":"9", "requirements":"requirements", "solution":"solution", "result":"result", "state":"active" }
+    ];
+
+    for ( var i = 0; i < complaints.length; ++i )
+    {
+        var complaint = new Complaint( complaints[ i ] );
+        complaint.save(function (err, part) {
+            if (err) 
+                return console.error(err);
+            else
+            {
+                console.log( part );
+            }
+        });
+    }
+}
 
 // routes
 app.get('/api/spare_parts', function(req, res) 
@@ -68,13 +111,21 @@ app.get('/api/spare_parts', function(req, res)
         console.log( parts );
         res.json(parts); // return all todos in JSON format
     });
+});
 
-    /*
-    var myRowData = [
-        { "code":"10", "name":"engine 10", "description":"diesel", "photo_id":"10", "comment_voronezh":"voronezh", "comment_rostov":"rostov" } ];
-    res.json( myRowData ); // return all todos in JSON format
-    console.log( "send data: " ); 
-    console.log( myRowData );*/
+app.get('/api/complaints', function(req, res) 
+{
+    // use mongoose to get all todos in the database
+    Complaint.find(function(err, complaints) 
+    {
+        // if there is an error retrieving, send the error. nothing after res.send(err) will execute
+        if (err)
+            res.send(err)
+        
+        console.log( "send data: " ); 
+        console.log( complaints );
+        res.json( complaints ); // return all todos in JSON format
+    });
 });
 
 // create todo and send back all todos after creation
