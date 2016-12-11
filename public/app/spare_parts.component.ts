@@ -52,7 +52,8 @@ export class SparePartsComponent implements OnInit {
     }
 
     getHeroes() {
-
+        
+        this.spareParts = [];
         this.heroService.getHeroes()
                         .subscribe(
                         heroes => {                             
